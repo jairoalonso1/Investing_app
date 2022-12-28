@@ -30,7 +30,7 @@ start_date = st.sidebar.date_input('Start date', datetime.datetime(2021, 1, 1))
 end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 
 # Fetch the data for specified ticker e.g. AAPL from yahoo finance
-df_ticker = pdr.DataReader(ticker, 'yahoo', start_date, end_date)
+df_ticker = pdr.dataReader(ticker, 'yahoo', start_date, end_date)
 
 st.header(f'{ticker} Stock Price')
 
