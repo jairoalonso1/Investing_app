@@ -2,3 +2,4 @@ datetime
 streamlit
 pandas_datareader
 cufflinks
+pandas
