@@ -1,3 +1,4 @@
-streamlit
-yfinance==0.1.74
-investpy
+import datetime
+import streamlit as st
+import pandas_datareader as pdr
+import cufflinks as cf
