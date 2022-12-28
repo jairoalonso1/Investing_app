@@ -1,4 +1,4 @@
-import datetime
-import streamlit as st
-import pandas_datareader as pdr
-import cufflinks as cf
+datetime
+streamlit
+pandas_datareader
+cufflinks
