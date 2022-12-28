@@ -2,6 +2,7 @@ import datetime
 import streamlit as st
 import pandas_datareader as pdr
 import cufflinks as cf
+import yfinance as yf
 
 APP_NAME = "Frontera Eficiente!"
 
