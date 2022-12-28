@@ -24,13 +24,14 @@ TICKERS = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOGL', 'MSFT']
 
 # Select ticker
 ticker = st.sidebar.selectbox('Select ticker', sorted(TICKERS), index=0)
+tickerData = yf.Ticker(ticker)
 
 # Set start and end point to fetch data
 start_date = st.sidebar.date_input('Start date', datetime.datetime(2021, 1, 1))
 end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 
 # Fetch the data for specified ticker e.g. AAPL from yahoo finance
-df_ticker = ticker.history(period="1d", start=start_date, end=end_date)
+df_ticker = tickerData.history(period='1d', start=start_date, end=end_date)
 
 st.header(f'{ticker} Stock Price')
 
