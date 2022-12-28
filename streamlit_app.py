@@ -3,7 +3,7 @@ import streamlit as st
 import pandas_datareader as pdr
 import cufflinks as cf
 
-APP_NAME = "Stock App!"
+APP_NAME = "Frontera Eficiente!"
 
 # Page Configuration
 st.set_page_config(
@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # Add some markdown
-st.sidebar.markdown("Made with love using [Streamlit](https://streamlit.io/).")
+st.sidebar.markdown("Grado de Inversion Funds")
 st.sidebar.markdown("# :chart_with_upwards_trend:")
 
 # Add app title
