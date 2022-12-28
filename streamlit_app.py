@@ -23,7 +23,7 @@ st.sidebar.title(APP_NAME)
 TICKERS = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOGL', 'MSFT']
 
 # Select ticker
-ticker = st.sidebar.text_input('AAPL')
+ticker = st.sidebar.text_input('STOCK OR ETF')
 tickerData = yf.Ticker(ticker)
 
 # Set start and end point to fetch data
