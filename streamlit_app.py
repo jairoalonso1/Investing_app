@@ -63,4 +63,4 @@ elif tab == "Rollings":
   st.write("Rolling volatility del fondo {}:".format(fund2))
   st.write(fund2_performance.rolling_volatility())
   st.write("Rolling sharpe del fondo {}:".format(fund2))
-  st.write(fund2_performance.rolling_sharpe()
+  st.write(fund2_performance.rolling_sharpe())
