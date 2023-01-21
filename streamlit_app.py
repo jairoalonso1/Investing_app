@@ -10,8 +10,8 @@ fecha_inicio = st.date_input("Ingrese la fecha de inicio")
 fecha_fin = st.date_input("Ingrese la fecha de fin")
 
 # Descargar los datos de los fondos seleccionados en el rango de fechas seleccionado
-fund1_data = qs.utils.download_returns(fund1, start=fecha_inicio, end=fecha_fin)
-fund2_data = qs.utils.download_returns(fund2, start=fecha_inicio, end=fecha_fin)
+fund1_data = qs.utils.download_returns(fund1)
+fund2_data = qs.utils.download_returns(fund2)
 
 # Calcular las métricas de rendimiento de los fondos
 fund1_performance = qs.Performance(fund1_data)
