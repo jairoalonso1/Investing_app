@@ -1,5 +1,5 @@
-datetime
 streamlit
-pandas_datareader
-cufflinks
-pandas
+quantstats
+pip>=22.3.1
+plotly
+
