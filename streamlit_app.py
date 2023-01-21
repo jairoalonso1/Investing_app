@@ -1,60 +1,66 @@
-import datetime
 import streamlit as st
-import cufflinks as cf
-import yfinance as yf
+import quantstats as qs
 
-APP_NAME = "Frontera Eficiente!"
+# Seleccionar los fondos a comparar
+fund1 = st.selectbox("Seleccione el primer fondo", ["IVV", "EEM", "AGG", "LQD"])
+fund2 = st.selectbox("Seleccione el segundo fondo", ["IVV", "EEM", "AGG", "LQD"])
 
-# Page Configuration
-st.set_page_config(
-    page_title=APP_NAME,
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+# Crear un widget de fecha para ingresar las fechas de inicio y fin
+fecha_inicio = st.date_input("Ingrese la fecha de inicio")
+fecha_fin = st.date_input("Ingrese la fecha de fin")
 
-# Add some markdown
-st.sidebar.markdown("Grado de Inversion Funds")
-st.sidebar.markdown("# :chart_with_upwards_trend:")
+# Descargar los datos de los fondos seleccionados en el rango de fechas seleccionado
+fund1_data = qs.download(fund1, start=fecha_inicio, end=fecha_fin)
+fund2_data = qs.download(fund2, start=fecha_inicio, end=fecha_fin)
 
-# Add app title
-st.sidebar.title(APP_NAME)
+# Calcular las métricas de rendimiento de los fondos
+fund1_performance = qs.Performance(fund1_data)
+fund2_performance = qs.Performance(fund2_data)
 
-# List of tickers
-TICKERS = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOGL', 'MSFT']
+# Crear una tabla con las principales métricas de los fondos
+metrics = ["Rendimiento Anualizado", "Tasa de Ganancia", "Volatilidad", "Drawdown"]
+values1 = [fund1_performance.annual_return, fund1_performance.winning_percentage, fund1_performance.volatility, fund1_performance.drawdown]
+values2 = [fund2_performance.annual_return, fund2_performance.winning_percentage, fund2_performance.volatility, fund2_performance.drawdown]
 
-# Select ticker
-ticker = st.sidebar.text_input('STOCK OR ETF', 'AAPL')
-tickerData = yf.Ticker(ticker)
+# Grafico de Earnings comparativo
+st.subheader("Gráfico de Earnings comparativo")
+qs.plt.earnings_plot(fund1_performance, label=fund1)
+qs.plt.earnings_plot(fund2_performance, label=fund2)
+st.pyplot()
 
-# Set start and end point to fetch data
-start_date = st.sidebar.date_input('Start date', datetime.datetime(2021, 1, 1))
-end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
+# Crear cuatro tabs:
+st.header("Análisis de fondos")
+tab = st.selectbox("Seleccione una pestaña",["Performance","Métricas", "Drawdown", "Rollings"])
 
-# Fetch the data for specified ticker e.g. AAPL from yahoo finance
-df_ticker = tickerData.history(period='1d', start=start_date, end=end_date)
+if tab == "Performance":
+st.subheader("Gráfico de Earnings comparativo")
+qs.plt.earnings_plot(fund1_performance, label=fund1)
+qs.plt.earnings_plot(fund2_performance, label=fund2)
+st.pyplot()
+st.write("Características del fondo {}:".format(fund1))
+st.write(fund1_performance.characteristics)
+st.write("Características del fondo {}:".format(fund2))
+st.write(fund2_performance.characteristics)
 
-st.header(f'{ticker} Stock Price')
+elif tab == "Métricas":
+st.table(metrics, values1, values2)
 
-if st.checkbox('Show raw data'):
-    st.subheader('Raw data')
-    st.write(df_ticker)
+elif tab == "Drawdown":
+st.subheader("Gráfico de Drawdown comparativo")
+qs.plt.drawdown_plot(fund1_performance, label=fund1)
+qs.plt.drawdown_plot(fund2_performance, label=fund2)
+st.pyplot()
+st.write("5 mayores Drawdowns del fondo {}:".format(fund1))
+st.write(fund1_performance.top_drawdowns(5))
+st.write("5 mayores Drawdowns del fondo {}:".format(fund2))
+st.write(fund2_performance.top_drawdowns(5))
 
-# Interactive data visualizations using cufflinks
-# Create candlestick chart
-qf = cf.QuantFig(df_ticker, legend='top', name=ticker)
-
-
-# Technical Analysis Studies can be added on demand
-# Add Relative Strength Indicator (RSI) study to QuantFigure.studies
-qf.add_rsi(periods=20, color='java')
-
-# Add Bollinger Bands (BOLL) study to QuantFigure.studies
-qf.add_bollinger_bands(periods=20,boll_std=2,colors=['magenta','grey'],fill=True)
-
-# Add 'volume' study to QuantFigure.studies
-qf.add_volume()
-
-fig = qf.iplot(asFigure=True, dimensions=(800, 600))
-
-# Render plot using plotly_chart
-st.plotly_chart(fig)
+elif tab == "Rollings":
+st.write("Rolling volatility del fondo {}:".format(fund1))
+st.write(fund1_performance.rolling_volatility())
+st.write("Rolling sharpe del fondo {}:".format(fund1))
+st.write(fund1_performance.rolling_sharpe())
+st.write("Rolling volatility del fondo {}:".format(fund2))
+st.write(fund2_performance.rolling_volatility())
+st.write("Rolling sharpe del fondo {}:".format(fund2))
+st.write(fund2_performance.rolling_sharpe()
